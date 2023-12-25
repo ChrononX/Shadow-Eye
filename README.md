@@ -23,6 +23,7 @@ Usage Example:
 
 
 -> python3 ip_offline_scanner.py
+
 -> Enter an IP address (or 'exit' to quit): 8.8.8.8
 
 This program is useful for scenarios where real-time internet access is limited, and users need offline access to geolocation information for specific IP addresses.
