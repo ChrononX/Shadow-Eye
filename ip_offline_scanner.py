@@ -13,7 +13,15 @@ def get_ip_info(target, city_reader, country_reader, asn_reader):
             # Try to resolve the target as a domain name using local DNS resolver
             ip_address = socket.gethostbyname(target)
         except socket.gaierror:
-            return f"Invalid target: {target}", "Unknown", "Unknown", "Unknown"
+            return {
+                "Target": target,
+                "IP Address": "Invalid target",
+                "Country": "Unknown",
+                "City": "Unknown",
+                "Provider": "Unknown",
+                "Longitude": "Unknown",
+                "Latitude": "Unknown"
+            }
 
     try:
         # Retrieve GeoIP information
@@ -26,26 +34,31 @@ def get_ip_info(target, city_reader, country_reader, asn_reader):
             "IP Address": ip_address,
             "Country": country_response.country.name,
             "City": city_response.city.name,
-            "Provider": asn_response.autonomous_system_organization
+            "Provider": asn_response.autonomous_system_organization,
+            "Longitude": city_response.location.longitude,
+            "Latitude": city_response.location.latitude
         }
 
         return ip_info
     except geoip2.errors.AddressNotFoundError:
-        return "Information not available", "Unknown", "Unknown", "Unknown"
+        return {
+            "Target": target,
+            "IP Address": "Information not available",
+            "Country": "Unknown",
+            "City": "Unknown",
+            "Provider": "Unknown",
+            "Longitude": "Unknown",
+            "Latitude": "Unknown"
+        }
 
 def process_log_file(log_file_path, city_reader, country_reader, asn_reader):
-    try:
-        with open(log_file_path, 'r') as log_file:
-            for line in log_file:
-                # Split each line into words and check for IP addresses or domains
-                words = line.split()
-                for word in words:
-                    ip_info = get_ip_info(word, city_reader, country_reader, asn_reader)
-                    print(f"\nInformation for {ip_info['Target']} ({ip_info['IP Address']}):")
-                    for key, value in ip_info.items():
-                        print(f"{key}: {value}")
-    except FileNotFoundError:
-        print(f"Error: Log file not found at {log_file_path}")
+    with open(log_file_path, 'r') as log_file:
+        for line in log_file:
+            target = line.strip()
+            ip_info = get_ip_info(target, city_reader, country_reader, asn_reader)
+            print(f"\nInformation for {ip_info['Target']} ({ip_info['IP Address']}):")
+            for key, value in ip_info.items():
+                print(f"{key}: {value}")
 
 def main():
     script_directory = os.path.dirname(os.path.realpath(__file__))
@@ -59,20 +72,19 @@ def main():
             geoip2.database.Reader(country_database_path) as country_reader:
 
         while True:
-            option = input("Enter '1' to enter IP address or domain directly, '2' to process a logfile, or 'exit' to quit: ")
-            
-            if option.lower() == 'exit':
-                break
+            choice = input("Do you want to enter an IP address/domain or provide a log file path? "
+                           "(Type 'ip' or 'log' or 'exit' to quit): ").lower()
 
-            if option == '1':
+            if choice == 'exit':
+                break
+            elif choice == 'ip':
                 target = input("Enter an IP address or domain name: ")
                 ip_info = get_ip_info(target, city_reader, country_reader, asn_reader)
                 print(f"\nInformation for {ip_info['Target']} ({ip_info['IP Address']}):")
                 for key, value in ip_info.items():
                     print(f"{key}: {value}")
-
-            elif option == '2':
-                log_file_path = input("Enter the path to the logfile: ")
+            elif choice == 'log':
+                log_file_path = input("Enter the path to the log file: ")
                 process_log_file(log_file_path, city_reader, country_reader, asn_reader)
 
 if __name__ == "__main__":
