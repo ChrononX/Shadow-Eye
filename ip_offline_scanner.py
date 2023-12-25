@@ -78,7 +78,7 @@ def process_log_file(log_file_path, city_reader, country_reader, asn_reader):
                 ip_occurrences[ip_address] += 1
 
     for ip, count in ip_occurrences.items():
-        print(f"\n{ip}: Information repeated {count} times")
+        print(f"\n{ip}: IP Detected {count} times")
 
 def main():
     print_shadow_eye()
