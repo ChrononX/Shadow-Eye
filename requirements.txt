@@ -1,2 +1,2 @@
-geoip2
-ipaddress
+ipaddress==1.0.23
+geoip2==2.9.0
