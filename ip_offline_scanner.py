@@ -4,11 +4,13 @@ import os
 
 def get_ip_info(ip_address, city_reader, country_reader, asn_reader):
     try:
-        ipaddress.IPv4Address(ip_address)
+        # Validate IP address
+        ip_obj = ipaddress.IPv4Address(ip_address)
     except ipaddress.AddressValueError:
         return "Invalid IP Address", "Unknown", "Unknown", "Unknown"
 
     try:
+        # Retrieve GeoIP information
         city_response = city_reader.city(ip_address)
         country_response = country_reader.country(ip_address)
         asn_response = asn_reader.asn(ip_address)
@@ -22,7 +24,7 @@ def get_ip_info(ip_address, city_reader, country_reader, asn_reader):
 
         return ip_info
     except geoip2.errors.AddressNotFoundError:
-        return "IP Address not found", "Unknown", "Unknown", "Unknown"
+        return "Information not available", "Unknown", "Unknown", "Unknown"
 
 def main():
     script_directory = os.path.dirname(os.path.realpath(__file__))
