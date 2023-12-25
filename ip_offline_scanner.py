@@ -52,13 +52,24 @@ def get_ip_info(target, city_reader, country_reader, asn_reader):
         }
 
 def process_log_file(log_file_path, city_reader, country_reader, asn_reader):
+    ip_occurrences = {}
+
     with open(log_file_path, 'r') as log_file:
         for line in log_file:
             target = line.strip()
             ip_info = get_ip_info(target, city_reader, country_reader, asn_reader)
-            print(f"\nInformation for {ip_info['Target']} ({ip_info['IP Address']}):")
-            for key, value in ip_info.items():
-                print(f"{key}: {value}")
+            ip_address = ip_info["IP Address"]
+
+            if ip_address not in ip_occurrences:
+                ip_occurrences[ip_address] = 1
+                print(f"\nInformation for {ip_info['Target']} ({ip_info['IP Address']}):")
+                for key, value in ip_info.items():
+                    print(f"{key}: {value}")
+            else:
+                ip_occurrences[ip_address] += 1
+
+    for ip, count in ip_occurrences.items():
+        print(f"\n{ip}: IP detected {count} times")
 
 def main():
     script_directory = os.path.dirname(os.path.realpath(__file__))
