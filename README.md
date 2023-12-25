@@ -17,9 +17,10 @@ Shadow Eye is a Python-based offline IP and domain information scanner. It lever
 
 ## Installation
 
-git clone https://github.com/ChrononX/Shadow-Eye.git
 
 ```Run the program using Python3.
+  git clone https://github.com/ChrononX/Shadow-Eye.git
+  cd Shadow-Eye/
   pip3 install -r requirements.txt
   python3 program.py
 ```
