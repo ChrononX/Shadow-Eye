@@ -1,0 +1,6 @@
+geoip2==4.0.3
+ipaddress==1.0.23
+
+
+#pip install -r requirements.txt
+
