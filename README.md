@@ -1,3 +1,10 @@
+    _               _                                 
+ ___| |__   __ _  __| | _____      __   ___ _   _  ___ 
+/ __| '_ \ / _` |/ _` |/ _ \ \ /\ / /  / _ \ | | |/ _ \
+\__ \ | | | (_| | (_| | (_) \ V  V /  |  __/ |_| |  __/
+|___/_| |_|\__,_|\__,_|\___/ \_/\_/    \___|\__, |\___|
+                                            |___/      
+
 **Shadow Eye**
 
 The IP Offline Scanner is a Python tool that provides geolocation information for IP addresses and domains using MaxMind's GeoIP databases. It offers a command-line interface for users to input either a single IP address or domain name, or a log file containing a list of IP addresses and domains. The tool retrieves details such as country, city, latitude, longitude, and internet service provider (ISP) information.
