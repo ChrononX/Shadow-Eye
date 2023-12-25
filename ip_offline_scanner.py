@@ -1,13 +1,19 @@
 import geoip2.database
 import ipaddress
+import socket
 import os
 
-def get_ip_info(ip_address, city_reader, country_reader, asn_reader):
+def get_ip_info(target, city_reader, country_reader, asn_reader):
     try:
-        # Validate IP address
-        ip_obj = ipaddress.IPv4Address(ip_address)
-    except ipaddress.AddressValueError:
-        return "Invalid IP Address", "Unknown", "Unknown", "Unknown"
+        # Try to interpret the target as an IP address
+        ip_obj = ipaddress.ip_address(target)
+        ip_address = str(ip_obj)
+    except ValueError:
+        try:
+            # Try to resolve the target as a domain name using local DNS resolver
+            ip_address = socket.gethostbyname(target)
+        except socket.gaierror:
+            return f"Invalid target: {target}", "Unknown", "Unknown", "Unknown"
 
     try:
         # Retrieve GeoIP information
@@ -16,6 +22,7 @@ def get_ip_info(ip_address, city_reader, country_reader, asn_reader):
         asn_response = asn_reader.asn(ip_address)
 
         ip_info = {
+            "Target": target,
             "IP Address": ip_address,
             "Country": country_response.country.name,
             "City": city_response.city.name,
@@ -38,13 +45,13 @@ def main():
             geoip2.database.Reader(country_database_path) as country_reader:
 
         while True:
-            ip_address = input("Enter an IP address (or 'exit' to quit): ")
-            if ip_address.lower() == 'exit':
+            target = input("Enter an IP address or domain name (or 'exit' to quit): ")
+            if target.lower() == 'exit':
                 break
 
-            ip_info = get_ip_info(ip_address, city_reader, country_reader, asn_reader)
+            ip_info = get_ip_info(target, city_reader, country_reader, asn_reader)
 
-            print(f"\nInformation for IP Address {ip_address}:")
+            print(f"\nInformation for {ip_info['Target']} ({ip_info['IP Address']}):")
             for key, value in ip_info.items():
                 print(f"{key}: {value}")
 
