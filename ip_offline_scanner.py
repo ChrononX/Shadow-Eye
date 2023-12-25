@@ -2,6 +2,15 @@ import geoip2.database
 import ipaddress
 import socket
 import os
+from pyfiglet import Figlet
+
+def print_shadow_eye():
+    figlet = Figlet(font='slant')
+    print(figlet.renderText('Shadow Eye'))
+    print("Made by chrononx")
+    print("--------------------")
+    print("https://github.com/ChrononX")
+    print("https://www.linkedin.com/in/davitmm22/")
 
 def get_ip_info(target, city_reader, country_reader, asn_reader):
     try:
@@ -69,9 +78,11 @@ def process_log_file(log_file_path, city_reader, country_reader, asn_reader):
                 ip_occurrences[ip_address] += 1
 
     for ip, count in ip_occurrences.items():
-        print(f"\n{ip}: IP detected {count} times")
+        print(f"\n{ip}: Information repeated {count} times")
 
 def main():
+    print_shadow_eye()
+    
     script_directory = os.path.dirname(os.path.realpath(__file__))
 
     asn_database_path = os.path.join(script_directory, 'GeoLite2-ASN_20231222/GeoLite2-ASN.mmdb')
