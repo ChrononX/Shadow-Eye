@@ -12,7 +12,6 @@ Shadow Eye is a Python-based offline IP and domain information scanner. It lever
 - Identify the autonomous system organization (ISP) associated with an IP address.
 - Support for both direct entry of IP addresses/domains and processing log files containing multiple entries.
 - Prevents duplication of IP addresses in the output, displaying the count of occurrences in log files.
-- Figlet-based ASCII art animation with a small trademark message.
 
 
 ## Installation
